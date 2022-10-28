@@ -63,7 +63,7 @@ const AdminDashboardPage = () => {
 
   return (
     <>
-      <div className="w-full h-fit flex flex-col justify-around items-center text-7xl object-contain overflow-auto text-gray-700 bg-black px-44">
+      <div className="w-full h-full flex-grow flex flex-col items-center text-7xl object-contain overflow-auto text-gray-700 bg-black px-44">
         <div className="w-full flex justify-between items-center mt-11">
           <h1 className="font-black text-5xl text-white ">APP</h1>
           <button

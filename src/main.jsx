@@ -37,10 +37,10 @@ function Main() {
   const { state } = React.useContext(AuthContext);
   console.log("state >> ", state);
   return (
-    <div className="h-full">
-      <div className="flex w-full">
+    <div className="h-screen">
+      <div className="flex w-full h-screen">
         <div className="w-full">
-          <div className="page-wrapper w-full">
+          <div className="page-wrapper w-full h-full">
             {!state.isAuthenticated
               ? renderRoutes("none")
               : renderRoutes(state.role)}
