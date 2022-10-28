@@ -50,6 +50,12 @@ const AuthProvider = ({ children }) => {
 
   React.useEffect(() => {
     //TODO
+    const checkstatus = async () => {
+      const response = await sdk.check();
+      console.log("status>>", response);
+    };
+
+    checkstatus();
   }, []);
 
   return (

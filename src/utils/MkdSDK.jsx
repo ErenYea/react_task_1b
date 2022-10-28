@@ -109,15 +109,12 @@ export default function MkdSDK() {
     const response = await fetch(
       "https://reacttask.mkdlabs.com/v2/api/lambda/check",
       {
-        headers: {
-          "Content-Type": "application/json",
-          "x-project": base64Encode,
-          Bearer: localStorage.getItem("token"),
-        },
+        headers: this.getHeader(),
         method: "POST",
         body: JSON.stringify({ role }),
       }
     );
+    console.log(response.text());
     return response.status;
     // console.log("response: >>", response);
   };
