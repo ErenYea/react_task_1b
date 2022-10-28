@@ -29,6 +29,8 @@ export default function MkdSDK() {
     const content = await response.json();
     if (!content.error) {
       localStorage.setItem("token", content.token);
+      localStorage.setItem("role", content.role);
+      localStorage.setItem("user_id", content.user_id);
     }
     return content;
   };
