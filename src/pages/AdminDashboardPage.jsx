@@ -12,12 +12,15 @@ import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
+import { AuthContext } from "../authContext";
+import { useNavigate } from "react-router";
 
 const AdminDashboardPage = () => {
   const [list, setList] = useState([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(1);
-
+  const { dispatch } = React.useContext(AuthContext);
+  const navigate = useNavigate();
   const columns = [
     { Header: "#", accessor: "id" },
     { Header: "Title", accessor: "title" },
@@ -38,6 +41,12 @@ const AdminDashboardPage = () => {
       return previousValue + 1;
     });
   };
+  const logout = () => {
+    dispatch({
+      type: "LOGOUT",
+    });
+    navigate("/admin/login", { replace: true });
+  };
   useEffect(() => {
     const getData = async (page) => {
       sdk.setTable("video");
@@ -57,7 +66,10 @@ const AdminDashboardPage = () => {
       <div className="w-full h-fit flex flex-col justify-around items-center text-7xl object-contain overflow-auto text-gray-700 bg-black px-44">
         <div className="w-full flex justify-between items-center mt-11">
           <h1 className="font-black text-5xl text-white ">APP</h1>
-          <button class="bg-[#9BFF00] text-black py-2 px-4 rounded-full inline-flex items-center text-sm h-10 ">
+          <button
+            class="bg-[#9BFF00] text-black py-2 px-4 rounded-full inline-flex items-center text-sm h-10 "
+            onClick={logout}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -285,44 +297,3 @@ const Row = ({ row, index, moveRow }) => {
 };
 
 export default AdminDashboardPage;
-{
-  /* <DndProvider backend={HTML5Backend}>
-            <table className="table-auto text-base w-full border-separate border-spacing-2 ">
-              {" "}
-              <thead>
-                <tr>
-                  <th className="text-justify">#</th>
-                  <th className="text-justify">Title</th>
-                  <th className="text-justify">Author</th>
-                  <th className="text-justify">Most Liked</th>
-                </tr>
-              </thead>
-              <tbody>
-                {list.map((row, index) => (
-                  <Row index={index} row={row} moveRow={moveRow} />
-                ))}
-                <tr className="border">
-                  <td>The Sliding Mr. Bones (Next Stop, Pottersville)</td>
-                  <td>Malcolm Lockyer</td>
-                  <td>1961</td>
-                </tr> */
-}
-{
-  /* <tr>
-                <td className="border border-slate-700">Witchy Woman</td>
-                <td className="border border-slate-700">The Eagles</td>
-                <td className="border border-slate-700">1972</td>
-              </tr>
-              <tr>
-                <td className="border border-slate-700">Shining Star</td>
-                <td className="border border-slate-700">
-                  Earth, Wind, and Fire
-                </td>
-                <td className="border border-slate-700">1975</td>
-              </tr> */
-}
-{
-  /* </tbody>
-            </table>
-          </DndProvider> */
-}
