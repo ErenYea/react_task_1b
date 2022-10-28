@@ -8,9 +8,15 @@ import update from "immutability-helper";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import CircularProgress from "@mui/material/CircularProgress";
+import Box from "@mui/material/Box";
+import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
+import ArrowBackIosIcon from "@mui/icons-material/ArrowBackIos";
 
 const AdminDashboardPage = () => {
   const [list, setList] = useState([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(1);
 
   const columns = [
     { Header: "#", accessor: "id" },
@@ -20,18 +26,31 @@ const AdminDashboardPage = () => {
   ];
   // const { state, dispatch } = React.useContext(GlobalContext);
   let sdk = new MkdSDK();
+  const previousPage = (e) => {
+    setList([]);
+    setPage((previousValue) => {
+      return previousValue - 1;
+    });
+  };
+  const nextPage = (e) => {
+    setList([]);
+    setPage((previousValue) => {
+      return previousValue + 1;
+    });
+  };
   useEffect(() => {
-    const getData = async () => {
+    const getData = async (page) => {
       sdk.setTable("video");
       const data = await sdk.callRestAPI(
-        { payload: {}, page: 1, limit: 10 },
+        { payload: {}, page: page, limit: 10 },
         "PAGINATE"
       );
       console.log(data);
       setList(data.list);
+      setTotal(data.num_pages);
     };
-    getData();
-  }, []);
+    getData(page);
+  }, [page]);
 
   return (
     <>
@@ -68,11 +87,29 @@ const AdminDashboardPage = () => {
           </div>
         </div>
         {list.length > 0 ? (
-          <div className="w-full flex justify-center items-center">
+          <div className="w-full flex flex-col justify-center items-center">
             <Table columns={columns} data={list} />
+            <div className="w-full flex justify-center items-center p-2 m-2">
+              <button
+                disabled={page <= 1 ? true : false}
+                onClick={previousPage}
+                class="bg-[#9BFF00] text-black py-2 px-4 rounded-full inline-flex items-center text-sm h-10 mr-2"
+              >
+                <ArrowBackIosIcon />
+              </button>
+              <button
+                onClick={nextPage}
+                disabled={page >= total ? true : false}
+                class="bg-[#9BFF00] text-black py-2 px-4 rounded-full inline-flex items-center text-sm h-10 ml-2"
+              >
+                <ArrowForwardIosIcon />
+              </button>
+            </div>
           </div>
         ) : (
-          ""
+          <Box sx={{ display: "flex" }} className="mt-11 mb-11">
+            <CircularProgress />
+          </Box>
         )}
       </div>
     </>
@@ -91,7 +128,7 @@ const Table = ({ columns, data }) => {
       columns,
       getRowId,
     });
-  console.log("headerGroupo>> ", headerGroups);
+  console.log("headerGroupo>> ", rows);
   const moveRow = (dragIndex, hoverIndex) => {
     const dragRecord = records[dragIndex];
     setRecords(
@@ -123,17 +160,20 @@ const Table = ({ columns, data }) => {
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map(
-            (row, index) =>
-              prepareRow(row) || (
-                <Row
-                  index={index}
-                  row={row}
-                  moveRow={moveRow}
-                  {...row.getRowProps()}
-                />
-              )
-          )}
+          {rows.map((row, index) => {
+            if (row.original.title) {
+              return (
+                prepareRow(row) || (
+                  <Row
+                    index={index}
+                    row={row}
+                    moveRow={moveRow}
+                    {...row.getRowProps()}
+                  />
+                )
+              );
+            }
+          })}
         </tbody>
       </table>
     </DndProvider>
