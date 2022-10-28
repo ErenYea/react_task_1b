@@ -5,7 +5,7 @@ import * as yup from "yup";
 import MkdSDK from "../utils/MkdSDK";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../authContext";
-import { GlobalContext } from "../globalContext";
+import { GlobalContext, showToast } from "../globalContext";
 
 const AdminLoginPage = () => {
   const schema = yup
@@ -37,10 +37,11 @@ const AdminLoginPage = () => {
       type: "LOGIN",
       payload: response,
     });
-    global.dispatch({
-      type: "SNACKBAR",
-      payload: { message: "Admin logged in" },
-    });
+    showToast(global.dispatch, "Admin logged in");
+    // global.dispatch({
+    //   type: "SNACKBAR",
+    //   payload: { message: "Admin logged in" },
+    // });
     navigate("/admin/dashboard", { replace: true });
     // sdk.check("admin");
   };
