@@ -1,4 +1,5 @@
 import React, { useReducer } from "react";
+import { useNavigate } from "react-router";
 import MkdSDK from "./utils/MkdSDK";
 
 export const AuthContext = React.createContext();
@@ -47,16 +48,25 @@ export const tokenExpireError = (dispatch, errorMessage) => {
 
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-
+  // const navigate = useNavigate();
   React.useEffect(() => {
     //TODO
     const checkstatus = async () => {
-      const response = await sdk.check();
-      console.log("status>>", response);
+      const response = await sdk.check("admin");
+      if (response) {
+        dispatch({ type: "LOGOUT" });
+        // navigate("/admin/login");
+      }
+      // console.log("status>>", response);
     };
-
-    checkstatus();
-  }, []);
+    console.log(state.isAuthenticated);
+    if (state.isAuthenticated) {
+      console.log("Inside effect");
+      setTimeout(() => {
+        checkstatus();
+      }, parseInt(localStorage.getItem("expires_at")) + 1);
+    }
+  }, [state.isAuthenticated]);
 
   return (
     <AuthContext.Provider

@@ -31,6 +31,7 @@ export default function MkdSDK() {
       localStorage.setItem("token", content.token);
       localStorage.setItem("role", content.role);
       localStorage.setItem("user_id", content.user_id);
+      localStorage.setItem("expires_at", content.expire_at);
     }
     return content;
   };
@@ -39,6 +40,7 @@ export default function MkdSDK() {
     return {
       Authorization: "Bearer " + localStorage.getItem("token"),
       "x-project": base64Encode,
+      "Content-Type": "application/json",
     };
   };
 
@@ -105,6 +107,7 @@ export default function MkdSDK() {
   };
 
   this.check = async function (role) {
+    console.log("Header>>", this.getHeader());
     //TODO
     const response = await fetch(
       "https://reacttask.mkdlabs.com/v2/api/lambda/check",
@@ -115,7 +118,12 @@ export default function MkdSDK() {
       }
     );
     console.log(response.text());
-    return response.status;
+    if (response.status == 200) {
+      return false;
+    } else {
+      return true;
+    }
+    // return response.status;
     // console.log("response: >>", response);
   };
 

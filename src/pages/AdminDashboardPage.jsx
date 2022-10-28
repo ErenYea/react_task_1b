@@ -54,7 +54,7 @@ const AdminDashboardPage = () => {
         { payload: {}, page: page, limit: 10 },
         "PAGINATE"
       );
-      console.log(data);
+      // console.log(data);
       setList(data.list);
       setTotal(data.num_pages);
     };
@@ -140,7 +140,7 @@ const Table = ({ columns, data }) => {
       columns,
       getRowId,
     });
-  console.log("headerGroupo>> ", rows);
+  // console.log("headerGroupo>> ", rows);
   const moveRow = (dragIndex, hoverIndex) => {
     const dragRecord = records[dragIndex];
     setRecords(
@@ -252,7 +252,7 @@ const Row = ({ row, index, moveRow }) => {
 
   preview(drop(dropRef));
   drag(dragRef);
-  console.log("row>>", row);
+  // console.log("row>>", row);
   return (
     <tr
       ref={dropRef}
